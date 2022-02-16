@@ -1,0 +1,11 @@
+@import "../../Variables.scss";
+.Landing {
+  margin: 3rem auto;
+  // border: 2px solid red;
+  width: $grid-width-2;
+  a {
+    font-size: 1.5rem;
+    text-decoration: none;
+    font-weight: 600;
+  }
+}

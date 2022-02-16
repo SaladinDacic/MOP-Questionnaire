@@ -1,0 +1,19 @@
+@import "../../Variables.scss";
+.AddEditMop {
+  margin: 4rem auto;
+  padding: 2rem;
+  width: $grid-width-3;
+  border: 2px solid yellow;
+  text-transform: capitalize;
+  font-size: 2rem;
+  .containers {
+    display: flex;
+    flex-direction: column;
+    padding: 1rem;
+  }
+  .AddEditMop__btn {
+    margin-bottom: 2rem;
+    width: 100%;
+    background-color: rgb(47, 221, 47);
+  }
+}

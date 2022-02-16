@@ -1,0 +1,47 @@
+.ListMops {
+  // border: 2px solid green;
+  display: grid;
+  grid-template-columns: 32% 32% 32%;
+  grid-gap: 1%;
+  &__mop {
+    display: flex;
+    flex-direction: column;
+    cursor: pointer;
+    border: 2px solid rgb(21, 228, 255);
+    text-transform: capitalize;
+    height: 35rem;
+    padding: 1rem !important;
+    color: black;
+    font-size: 1.2rem !important;
+    overflow: hidden;
+    position: relative;
+    &:hover::after {
+      position: absolute;
+      border: 2px solid orange;
+      background-color: orange;
+      font-size: 2rem;
+      content: "Open Questionnaire Preview";
+    }
+  }
+  &__buttons {
+    display: flex;
+    justify-content: space-between;
+  }
+  &__buttons > * {
+    border: 2px groove rgba(0, 217, 255, 0.432);
+    min-height: 1.9rem;
+    // background-color: white;
+    color: black;
+    font-weight: 900;
+    font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS",
+      sans-serif;
+    font-style: oblique;
+    cursor: pointer;
+    &:first-child {
+      background-color: #2fdd2f;
+    }
+    &:last-child {
+      background-color: #f3371e;
+    }
+  }
+}

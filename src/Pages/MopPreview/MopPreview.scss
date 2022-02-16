@@ -1,0 +1,14 @@
+@import "../../Variables.scss";
+.MopPreview {
+  margin: 4rem auto;
+  padding: 2rem;
+  width: $grid-width-3;
+  border: 2px solid yellow;
+  text-transform: capitalize;
+  font-size: 2rem;
+  &__containers {
+    display: flex;
+    flex-direction: column;
+    padding: 1rem;
+  }
+}
