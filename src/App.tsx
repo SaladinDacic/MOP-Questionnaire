@@ -1,117 +1,109 @@
 import "./App.scss";
 import { Routes, Route } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { AddEditMop, Landing, MopPreview } from "./Pages";
 import { ListMops } from "./Components";
 import { v4 as uuid } from "uuid";
 
 export interface MopInterface {
-  id: string;
   name: string;
-  data: {
-    multipleChoises: { task: string; choises: string[] }[];
-    singleChoises: { task: string; choises: string[] }[];
-    texts: string[];
-    yesNos: string[];
-  };
+  data:
+    | {
+        multipleChoices: { task: string; choices: string[] }[];
+        singleChoices: { task: string; choices: string[] }[];
+        texts: string[];
+        yesNos: string[];
+      }
+    | any;
 }
 function App() {
-  const initialMops: MopInterface[] = [
-    {
-      id: uuid(),
-      name: "prvi MOP",
-      data: {
-        texts: ["imate li loših iskustava", "imate li loših iskustava2"],
-        yesNos: ["jeste li Vip?", "jesi ti šta ti je?"],
-        multipleChoises: [
-          {
-            task: "koje takmičari su vam se svidjeli",
-            choises: ["prvi", "drugi", "treći"],
-          },
-          {
-            task: "koje takmičari va se nisu svidjeli",
-            choises: ["četvrti", "peti", "šesti"],
-          },
-        ],
-        singleChoises: [
-          {
-            task: "koje takmičar je pobjedio u prvoj rundi",
-            choises: ["prvi", "drugi", "treći"],
-          },
-          {
-            task: "koje takmičar je pobjedio u prvoj rundi",
-            choises: ["četvrti", "peti", "šesti"],
-          },
-        ],
-      },
+  const initialMops: { [id: string]: MopInterface } | any = {};
+  initialMops[uuid()] = {
+    name: "prvi MOP",
+    data: {
+      texts: ["imate li loših iskustava", "imate li loših iskustava2"],
+      yesNos: ["jeste li Vip?", "jesi ti šta ti je?"],
+      multipleChoices: [
+        {
+          task: "koje takmičari su vam se svidjeli",
+          choices: ["prvi", "drugi", "treći"],
+        },
+        {
+          task: "koje takmičari va se nisu svidjeli",
+          choices: ["četvrti", "peti", "šesti"],
+        },
+      ],
+      singleChoices: [
+        {
+          task: "koje takmičar je pobjedio u prvoj rundi",
+          choices: ["prvi", "drugi", "treći"],
+        },
+        {
+          task: "koje takmičar je pobjedio u prvoj rundi",
+          choices: ["četvrti", "peti", "šesti"],
+        },
+      ],
     },
-    {
-      id: uuid(),
-      name: "drugi MOP",
-      data: {
-        texts: ["imate li loših iskustava3", "imate li loših iskustava4"],
-        yesNos: ["jeste li Vip?", "jeste li dugogodišnji član?"],
-        multipleChoises: [
-          {
-            task: "koje takmičari su vam se svidjeli",
-            choises: ["prvi", "drugi", "treći"],
-          },
-          {
-            task: "koje takmičari va se nisu svidjeli",
-            choises: ["četvrti", "peti", "šesti"],
-          },
-        ],
-        singleChoises: [
-          {
-            task: "koje takmičar je pobjedio u prvoj rundi",
-            choises: ["prvi", "drugi", "treći"],
-          },
-          {
-            task: "koje takmičar je pobjedio u prvoj rundi",
-            choises: ["četvrti", "peti", "šesti"],
-          },
-        ],
-      },
+  };
+  initialMops[uuid()] = {
+    name: "drugi MOP",
+    data: {
+      texts: ["imate li loših iskustava3", "imate li loših iskustava4"],
+      yesNos: ["jeste li Vip?", "jeste li dugogodišnji član?"],
+      multipleChoices: [
+        {
+          task: "koje takmičari su vam se svidjeli",
+          choices: ["prvi", "drugi", "treći"],
+        },
+        {
+          task: "koje takmičari va se nisu svidjeli",
+          choices: ["četvrti", "peti", "šesti"],
+        },
+      ],
+      singleChoices: [
+        {
+          task: "koje takmičar je pobjedio u prvoj rundi",
+          choices: ["prvi", "drugi", "treći"],
+        },
+        {
+          task: "koje takmičar je pobjedio u prvoj rundi",
+          choices: ["četvrti", "peti", "šesti"],
+        },
+      ],
     },
-  ];
-  let savedState = window.localStorage.getItem("mopList");
-  const [mopList, setMopList] = useState<MopInterface[]>(() => {
-    savedState && console.log(JSON.parse(savedState)[0] == null);
-    if (savedState && JSON.parse(savedState).length !== 0) {
-      if (JSON.parse(savedState)[0] == null) return initialMops;
-      return JSON.parse(savedState);
-    } else {
-      return initialMops;
-    }
-  });
+  };
 
-  useEffect(() => {
-    window.localStorage.setItem("mopList", JSON.stringify(mopList));
-  }, [mopList]);
+  const [mopList, setMopList] = useState<{ [id: string]: MopInterface }>(
+    () => initialMops
+  );
 
   const addMop = (newMop: MopInterface) => {
-    setMopList((oldMopList) => {
-      if (oldMopList.length === 0) return [newMop];
-      else return [...oldMopList, newMop];
-    });
+    // take old state
+    let oldMopList = mopList || {};
+    // modify  state
+    let id = uuid();
+    let newState = { ...oldMopList };
+    newState[id] = newMop;
+    // set new State
+    setMopList(newState);
   };
   const editMop = (newMop: MopInterface, id: string) => {
-    setMopList((oldMopList) => {
-      let newMopList = oldMopList.map((obj: MopInterface) => {
-        if (obj.id === id) return newMop;
-        else return obj;
-      });
-      if (oldMopList.length === 0) return [newMop];
-      else return [...newMopList];
-    });
+    // take old state
+    let oldMopList = mopList || {};
+    // modify  state
+    let newState = { ...oldMopList };
+    newState[id] = newMop;
+    // set new State
+    setMopList(newState);
   };
   const deleteMop = (id: string) => {
-    setMopList((oldMopList) => {
-      let newMopList = oldMopList.filter((obj) => {
-        return obj.id !== id;
-      });
-      return [...newMopList];
-    });
+    // take old state
+    let oldMopList = mopList || {};
+    // modify  state
+    let newState = { ...oldMopList };
+    delete newState[id];
+    // set new State
+    setMopList(newState);
   };
   return (
     <div className="App">
@@ -124,9 +116,15 @@ function App() {
             />
           }
         />
-        <Route path="/add" element={<AddEditMop addMop={addMop} />} />
-        <Route path="/edit/:id" element={<AddEditMop editMop={editMop} />} />
-        <Route path="/mop/:id" element={<MopPreview />} />
+        <Route
+          path="/add"
+          element={<AddEditMop mopList={mopList} addMop={addMop} />}
+        />
+        <Route
+          path="/edit/:id"
+          element={<AddEditMop mopList={mopList} editMop={editMop} />}
+        />
+        <Route path="/mop/:id" element={<MopPreview mopList={mopList} />} />
       </Routes>
     </div>
   );
